@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+	"super-payment-kunn/internal/invoice/dto"
 	"super-payment-kunn/internal/invoice/repositories"
 	"super-payment-kunn/models"
 	"time"
@@ -11,7 +13,7 @@ var ID = 0
 
 type InvoiceService interface {
 	GetInvoices() []*models.Invoice
-	PostInvoice(invoice *models.InvoiceRequestJson) (*models.Invoice, error)
+	PostInvoice(invoice *dto.InvoiceRequestJson) error
 }
 
 type invoiceService struct {
@@ -26,7 +28,11 @@ func (s *invoiceService) GetInvoices() []*models.Invoice {
 	return s.repository.SelectAll()
 }
 
-func (s *invoiceService) PostInvoice(req *models.InvoiceRequestJson) (*models.Invoice, error) {
+func (s *invoiceService) PostInvoice(req *dto.InvoiceRequestJson) error {
+	dueDate, err := time.Parse("2024-10-14T00:00:00Z", req.DueDate)
+	if err != nil {
+		return errors.New("Invalid due date format")
+	}
 	issueDate := time.Now()
 
 	// FIXME: 変更があるかもしれないので、外から差し込めるような形式にしたい
@@ -35,10 +41,11 @@ func (s *invoiceService) PostInvoice(req *models.InvoiceRequestJson) (*models.In
 
 	totalAmount := float64(req.Amount) + (float64(req.Amount) * feeRate * (1.0 + taxRate))
 
+	// FIXME: 本当はドメインで変換するべきかもしれない
 	invoice := &models.Invoice{
 		ID:          ID,
 		Amount:      req.Amount,
-		DueDate:     time.Unix(int64(req.DueDate), 0),
+		DueDate:     dueDate,
 		IssueDate:   issueDate,
 		TotalAmount: totalAmount,
 		FeeRate:     feeRate,
@@ -46,11 +53,11 @@ func (s *invoiceService) PostInvoice(req *models.InvoiceRequestJson) (*models.In
 		Status:      models.StatusUnprocessed,
 	}
 
-	err := s.repository.Store(invoice)
+	err = s.repository.Store(invoice)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	ID++
-	return invoice, nil
+	return nil
 }

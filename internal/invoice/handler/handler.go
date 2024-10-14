@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"super-payment-kunn/internal/invoice/dto"
 	"super-payment-kunn/internal/invoice/service"
-	"super-payment-kunn/models"
 )
 
 type InvoiceHandler struct {
@@ -38,12 +38,12 @@ func (h *InvoiceHandler) GetInvoices(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *InvoiceHandler) PostInvoice(w http.ResponseWriter, r *http.Request) {
-	var req *models.InvoiceRequestJson
+	var req *dto.InvoiceRequestJson
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid Request", http.StatusBadRequest)
 	}
 
-	_, err := h.service.PostInvoice(req)
+	err := h.service.PostInvoice(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
