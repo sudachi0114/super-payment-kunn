@@ -12,7 +12,7 @@ import (
 var ID = 0
 
 type InvoiceService interface {
-	GetInvoices() []*models.Invoice
+	GetInvoices() ([]*models.Invoice, error)
 	PostInvoice(invoice *dto.InvoiceRequestJson) error
 }
 
@@ -24,12 +24,12 @@ func NewInvoiceService(repo repositories.InvoiceRepository) InvoiceService {
 	return &invoiceService{repository: repo}
 }
 
-func (s *invoiceService) GetInvoices() []*models.Invoice {
+func (s *invoiceService) GetInvoices() ([]*models.Invoice, error) {
 	return s.repository.SelectAll()
 }
 
 func (s *invoiceService) PostInvoice(req *dto.InvoiceRequestJson) error {
-	dueDate, err := time.Parse("2024-10-14T00:00:00Z", req.DueDate)
+	dueDate, err := time.Parse(time.RFC3339, req.DueDate)
 	if err != nil {
 		return errors.New("Invalid due date format")
 	}

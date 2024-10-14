@@ -32,7 +32,10 @@ func (h *InvoiceHandler) HandleApiInvoice(w http.ResponseWriter, r *http.Request
 }
 
 func (h *InvoiceHandler) GetInvoices(w http.ResponseWriter, r *http.Request) {
-	invoices := h.service.GetInvoices()
+	invoices, err := h.service.GetInvoices()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
 	json.NewEncoder(w).Encode(invoices)
 }
