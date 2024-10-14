@@ -1,0 +1,58 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go modules
+/go/pkg/mod/
+/go/bin/
+
+# Vendor directory
+vendor/
+
+# Go build
+build/
+dist/
+*.o
+*.a
+
+# MacOS specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# VSCode specific
+.vscode/
+.history/
+*.code-workspace
+*.swp
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Goland specific files (optional, if you use it)
+.idea/
+
+# Coverage reports
+*.cov
+
+# Local Go build
+bin/
+tmp/
+
+# Generated Go files
+*.gen.go
