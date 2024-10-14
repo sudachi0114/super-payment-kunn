@@ -1,10 +1,13 @@
 package service
 
-import "super-payment-kunn/internal/invoice/repositories"
+import (
+	"super-payment-kunn/internal/invoice/repositories"
+	"super-payment-kunn/models"
+)
 
 type InvoiceService interface {
-	GetInvoices() []map[string]string
-	PostInvoice(invoice map[string]string)
+	GetInvoices() []*models.Invoice
+	PostInvoice(invoice *models.Invoice)
 }
 
 type invoiceService struct {
@@ -15,10 +18,10 @@ func NewInvoiceService(repo repositories.InvoiceRepository) InvoiceService {
 	return &invoiceService{repository: repo}
 }
 
-func (s *invoiceService) GetInvoices() []map[string]string {
+func (s *invoiceService) GetInvoices() []*models.Invoice {
 	return s.repository.SelectAll()
 }
 
-func (s *invoiceService) PostInvoice(invoice map[string]string) {
+func (s *invoiceService) PostInvoice(invoice *models.Invoice) {
 	s.repository.Store(invoice)
 }
