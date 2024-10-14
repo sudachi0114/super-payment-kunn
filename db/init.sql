@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS invoice (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    amount INT NOT NULL,
+    due_date DATE NOT NULL,
+    issue_date DATE NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    fee_rate DECIMAL(5, 2) NOT NULL,
+    tax_rate DECIMAL(5, 2) NOT NULL,
+    `status` TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+);

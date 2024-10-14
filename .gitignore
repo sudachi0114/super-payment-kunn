@@ -41,7 +41,6 @@ Icon
 
 # Logs and databases
 *.log
-*.sql
 *.sqlite
 
 # Goland specific files (optional, if you use it)
