@@ -39,6 +39,7 @@ func (s *invoiceService) PostInvoice(req *dto.InvoiceRequestJson) error {
 	const feeRate = 0.04
 	const taxRate = 0.1
 
+	// totalAmount の計算はコアロジックなので、テスタブルになるように切り出したい
 	totalAmount := float64(req.Amount) + (float64(req.Amount) * feeRate * (1.0 + taxRate))
 
 	// FIXME: 本当はドメインで変換するべきかもしれない
