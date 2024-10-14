@@ -38,11 +38,16 @@ func (h *InvoiceHandler) GetInvoices(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *InvoiceHandler) PostInvoice(w http.ResponseWriter, r *http.Request) {
-	var invoice *models.Invoice
-	if err := json.NewDecoder(r.Body).Decode(&invoice); err != nil {
+	var req *models.InvoiceRequestJson
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid Request", http.StatusBadRequest)
 	}
 
-	h.service.PostInvoice(invoice)
+	_, err := h.service.PostInvoice(req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
 }
